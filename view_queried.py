@@ -433,7 +433,7 @@ def get_tops(dfs,date):
         lines.append('</tr>')
     lines.append('</table>')
 
-    with open(f'TopTen_{date}.html','w') as f:
+    with open(f'TopTen.html','w') as f:
         f.writelines(lines)
     return
 
@@ -447,16 +447,16 @@ if __name__ == '__main__':
     print('adding derived info')
     df = add_derived_info(df,df_sewer,df_school)
     print('saving')
-    df.to_file(f'listing_{date}.geojson')
-    df = gpd.GeoDataFrame.from_file(f'listing_{date}.geojson')
+    df.to_file(f'listing.geojson')
+    df = gpd.GeoDataFrame.from_file(f'listing.geojson')
     del df['last_status_change_date']
     del df['last_update_date']
     print('scoring')
     dfs = add_points_and_split(df)
-    pd.concat(dfs,ignore_index=True).to_csv(f'listing_{date}_scored.csv',index=False)
+    pd.concat(dfs,ignore_index=True).to_csv(f'listing_scored.csv',index=False)
     print('mapping')
     m = add_listings_to_map(m,dfs)
     print('rendering')
     folium.LayerControl(collapsed=False).add_to(m)
-    m.save(f'listing_{date}.html')
+    m.save(f'listing.html')
     get_tops(dfs,date)
